@@ -1,0 +1,9 @@
+.message {
+	z-index: 100;
+	position: absolute;
+	display: none;
+	background: #FBFFA5;
+	border: 1px solid #EBB818;
+	color: #EBB818;
+	padding: 5px;
+}

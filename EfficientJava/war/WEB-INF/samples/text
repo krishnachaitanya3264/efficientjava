@@ -1,0 +1,11 @@
+
+		<div>
+			Why does the compiler generate an exception this time? Well there are a couple of reasons.
+		</div>
+		<div>
+			1. It is a requirement for most of the compilers that the name of the class must match with the file. It is used for faster compilation 
+			because the compiler need not check a bunch of files in every directory.
+			<br>
+			2. Compilers in other languages before java was introduces also use this mechanism. If there is a public class the file name must match
+			the class name. So developers of java also designed the compiler like this.
+		</div>

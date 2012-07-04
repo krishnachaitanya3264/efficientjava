@@ -1,0 +1,25 @@
+.javaclass {
+	border: 1px dashed;
+	background: #D6E2EE;
+}
+ul {
+	margin-top: 15px;
+}
+ol {
+	padding-left: 23px;
+	border: 1px dashed;
+	margin-top: 15px;
+}
+#container .code div div {
+	background: #677F99;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	color: #677F99;
+}
+#container .code div div a {
+	color: white;
+	font-weight: normal;
+	font-size: 12px;
+	text-decoration: none;
+}

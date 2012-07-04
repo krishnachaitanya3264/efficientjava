@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Java class name vs file name</title>
+	<link rel="stylesheet" type="text/css" href="styles/main.css">
+	<link href="styles/code.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="scripts/codeformatter.js"></script>
+		<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33145925-1']);
+		_gaq.push(['_trackPageview']);
+		
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</head>
+<body onload="formatCode()">
+	<div id="container">
+		<div style="margin-top:0px">
+			<h1>Should a java class name match the file name?</h1>
+		</div>
+		<hr class="separator">
+		<div>
+			<a href="/">Home</a>
+		</div>
+		<div>
+			Many people ask, should my java class name match the file name? The answer is no. It need not match the file name in one case.
+		</div>
+		<div>
+			If you are not using <label class="javakeyword">public</label> access specifier for your class you need not save the file name with the
+			class name.
+		</div>
+		<div>
+			But if you are using a <label class="javakeyword">public</label> access specifier for your class which has the main method, then you have to definitely save the file 
+			with the class name.
+		</div>
+		<div>
+			Check out the following code. Save the file with any name. Say for example test.java
+		</div>
+		<div class="code">
+			<b>Code</b>
+			<textarea rows="6" cols="100"  style="width: 99%">
+				class ClassNamevsFileName {
+					public static void main(String kk[]) {
+						System.out.println("Love java");
+					}
+				}
+			</textarea>
+		</div>
+		<div class="code">
+			<b>Compile</b>
+			<textarea rows="1" cols="100"  style="width: 99%">
+				javac test.java
+			</textarea>
+		</div>
+		<div>
+			If you try to execute the program using "java test" it will produce the following runtime exception.
+		</div>
+		<div class="code">
+			<b>Execute</b>
+			<textarea rows="1" cols="100"  style="width: 99%">
+				java test
+			</textarea>
+		</div>
+		<div>
+			<img src="images/noclassdeffounderror.png" style="margin-left: 17%;">
+		</div>
+		<div>
+			This is because the compiler does not create the class file with the file name. It creates the class file with the class name. That is why
+			even though you save the program as test.java you cannot run it using the file name. Look into folder where you saved the file. You can
+			see the class file created with the name <b class="javaclass">ClassNamevsFileName</b>.
+		</div>
+		<div class="code">
+			Run the program using this command.
+			<textarea rows="1" cols="100" style="width: 99%">
+				java ClassNamevsFileName
+			</textarea>
+		</div>
+		<div>
+			Now the program will execute properly without any runtime exception.
+		</div>
+		<div>
+			Now edit the above code and add a <label class="javakeyword">public</label> access specifier to the class and save it.
+		</div>
+		<div class="code">
+			<b>Code</b>
+			<textarea rows="6" cols="100" style="width: 99%">
+				public class ClassNamevsFileName {
+					public static void main(String kk[]) {
+						System.out.println("Love java");
+					}
+				}
+			</textarea>
+		</div>
+		<div class="code">
+			Compile the code using
+			<textarea rows="1" cols="100" style="width: 99%">
+				javac test.java
+			</textarea>
+		</div>
+		<div>
+			When you compile this code it will produce the following compile time exception.
+		</div>
+		<div>
+			<img src="images/compiletimeexception.png" style="margin-left: 15%">
+		</div>
+		<div>
+			This is because when the compiler sees the <label class="javakeyword">public</label> access specifier it expects the file to be saved
+			with the class name. So now rename	the file with ClassNamevsFileName. Now try compile the code. It will compile and execute 
+			successfully. 
+		</div>
+		<div>
+			The compiler and interpreter are tricky. The designers of java have also imposed one more rule on the programs we write. A single java 
+			file cannot contain more than one <label class="javakeyword">public</label> class in it.
+		</div>
+		<div>
+			Write two <label class="javakeyword">public</label> classes in one single file and save the file with any of the <label class="javakeyword">public</label> class name. Try compiling it and check what 
+			error it produces.
+		</div>
+		<div>
+			Now after knowing all these you will get few questions in mind. You might even be confused.
+			<ul>
+				<li>Why a file having a <label class="javakeyword">public</label> class should be named with the class name? Why files with non <label class="javakeyword">public</label> classes need not be saved with class name?</li>
+				<li>Why the compiler is designed like this?</li>
+				<li>Why should there be only one <label class="javakeyword">public</label> class per file?</li>
+			</ul>
+		</div>
+		<div>
+			The answers to these questions are as follows.
+		</div>
+		<div>
+			Suppose you have a <label class="javakeyword">public</label> class named <b class="javaclass">my.important.JavaClass</b>. Now you know where to locate the source code. 
+			Its under my/important/ folder. If you save your <label class="javakeyword">public</label> class with other name then where will you start your search? You have to search
+			the entire package for the list of classes in it. The same applies to the compiler. So the designers of java have imposed this rule.
+			So the file name must be named with the <label class="javakeyword">public</label> class name. This will improve the compiler's performance.
+		</div>
+		<div>
+			Now, why only one <label class="javakeyword">public</label> class?
+		</div>
+		<div>
+			Suppose if you have two <label class="javakeyword">public</label> classes in a single file. With which class name will you save the java unit? Ambiguity. Right? 
+			This is the reason why there should be only one <label class="javakeyword">public</label> class in a java file.
+		</div>
+		<div>
+			Now you can ask me why a non <label class="javakeyword">public</label> class saved with a different name will not produce compilation errors?
+		</div>
+		<div>
+			Having a non <label class="javakeyword">public</label> class is not a syntax error. This time you can name the file name with any name. There is no standard answer for
+			this. The designers of java are probably the right persons to answer this question. We can assume that this time the compiler's 
+			performance will be degraded.
+		</div>
+		<div>
+			Now you may ask me, why not make all classes <label class="javakeyword">public</label> and improve the compiler's performance?
+		</div>
+		<div>
+			No. Don't do that. Classes will be declared <label class="javakeyword">public</label> or non <label class="javakeyword">public</label> depending on the requirement. If you want a class to be available 
+			only at the package level we must declare it as non <label class="javakeyword">public</label> class. If you declare all classes as <label class="javakeyword">public</label> there is no abstraction.
+		</div>
+		<div>
+			So what I can suggest is at least declare the main entry point class or the classes which must be available to others as <label class="javakeyword">public</label>. Hope
+			this makes sense.
+		</div>
+		<div>
+			<a href="/">Home</a>
+		</div>
+		<hr class="separator">
+	</div>
+</body>
+</html>

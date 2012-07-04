@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>String vs StringBuffer</title>
+	<link rel="stylesheet" type="text/css" href="styles/main.css">
+	<link href="styles/code.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="scripts/codeformatter.js"></script>
+		<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33145925-1']);
+		_gaq.push(['_trackPageview']);
+		
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</head>
+<body onload="formatCode()">
+	<div id="container">
+		<div style="margin-top: 0px">
+			<h1>Difference between String and StringBuffer. Most important question.</h1>
+		</div>
+		<hr class="separator">
+		<div>
+			<a href="/">Home</a>
+		</div>
+		<div>
+			The main difference is <b class="javaclass">String</b> is <b>IMMUTABLE</b> and <b class="javaclass">StringBuffer</b> is <b>MUTABLE</b>.
+		</div>
+		<div>
+			So, what is this "immutable / mutable" stuff?
+		</div>
+		<div>
+			The general meaning of immutable is: Cannot be changed over time. And when are reading about <b class="javaclass">String</b> class in java textbooks or in 
+			java sites they also say the same thing.
+		</div>
+		<div>
+			Thus, it means strings created using <b class="javaclass">String</b> class cannot be changed over time. We will start our discussion with the <b class="javaclass">String</b> class first.
+		</div>
+		<div>
+			Now according to the definition it means line 2 in this following code is invalid.
+		</div>
+		<div class="code">
+			<b>Code</b>
+			<textarea rows="6" cols="100" style="width: 99%">
+				String name = "karthik"; //This is a valid statement
+				name = "krishna"; //Here I am changing the value of name. This line is invalid.
+				System.out.println("My name is " + name);
+			</textarea>
+		</div>
+		<div>
+			Now try to compile and execute this code. Then see what is printed to the console. As you were expecting and according to the 
+			definition "karthik" must be outputted. But strangely the output will be "krishna".
+		</div>
+		<div>
+			In the first line I just created a variable named "name" and I initialized it with the value "karthik". This is looking code. In the 2nd 
+			like I re-initialized the value with "krishna". According to the definition of immutable the second line must silently fail or show a 
+			compile time or run time exception. But amazingly we don't get any exceptions. Again according to the definition the 3rd like must 
+			print "karthik" as output. But amazingly it prints "krishna".
+		</div>
+		<div>
+			So what is happening actually? Now we need to take close a look at the virtual machine. What actually the java virtual machine tries
+			 to do when you create a string using <b class="javaclass">String</b> class and when you try to re-instantiate the string?
+		</div>
+		<div>
+			JVM actually maintains a string pool in the heap. Heap is nothing but a part of the memory in which your JVM is running. 
+			Every application needs some main memory (RAM) to run, so does java. For example VLC Media Player needs some RAM space to run. 
+			JVM also needs some RAM space to run.
+		</div>
+		<div>
+			What is string pool? What is a pool? A pool is a collection of something. For example consider a swimming pool. It is a collection of 
+			water drops. Similarly string pool is a collection of strings. So all strings declared in your application will be stored in the 
+			string pool. Regardless of which class you used to create the string (whether <b class="javaclass">String</b> or <b class="javaclass">StringBuffer</b> or <b class="javaclass">StringBuilder</b>), all strings 
+			are stored in the string pool.
+		</div>
+		<div>
+			<img src="images/stringpool.png" border="0px" style="margin-left: 35%" />
+		</div>
+		<div>
+			See the following diagram. This is how strings are stored internally.
+		</div>
+		<div>
+			Now back to our program again. When the VM sees the first line it creates a string called "karthik" by following these steps:
+			<ul>
+				<li>Create a string called "karthik" in the pool.</li>
+				<li>Create a variable called "name" somewhere in the heap and make that variable refer to this string location.</li>
+			</ul>
+		</div>
+		<div>
+			When the VM encounters the second line it follows these steps:
+			<ul>
+				<li>Create a string called "krishna" in the pool.</li>
+				<li>Destroy the variable called "name".</li>
+				<li>Create a variable called "name".</li>
+				<li>Make the variable point the new value "krishna".</li>
+			</ul>
+		</div>
+		<div>
+			This is how java creates string variables, assigns values, reassign's values. This is somewhat awkward, right? Some TIME is wasted.
+		</div>
+		<div>
+			One thing you have to understand here is the string "karthik" remains in the string pool only. 
+		</div>
+		<div>
+			Consider few examples:
+		</div>
+		<div>
+			<table cellspacing="0px" border="1px">
+				<tr><td>name + "chaitanya";</td><td>This will create a new string in the string pool. But does not reinitialize the string "name"</td></tr>
+				<tr><td>name = name + "chaitanya";</td><td>This creates a new string in the string pool and reinitializes the "name" variable</td></tr>
+				<tr><td>name.replace('c', 'n');</td><td>This will also create a new string in the string pool but will not be reflected in the "name" variable</td></tr>
+				<tr><td>name = name.replace('c', 'n');</td><td>This creates a new string in the pool and the changes are now reflected in the "name" variable.</td></tr>
+			</table>
+		</div>
+		<div>
+			Try executing this program and you will see unexpected outputs and you can understand the <b class="javaclass">String</b> class clearly.
+		</div>
+		<div class="code">
+			<b>Code</b>
+			<textarea rows="6" cols="100" style="width: 99%">
+				public class StringTest {
+				public static void main(String kk[]) {
+				String name = "krishna";
+				name + "chaitanya";
+				System.out.println("My name is " + name);
+				name.replace('a', 'n');
+				System.out.println("My name is " + name);
+				}
+				}
+			</textarea>
+		</div>
+		<div>
+			What do you think line 5 and line 7 would print? We expect it to print "krishna chaitanya" and "krishnn chnitnnyn". 
+			But as usually it prints "krishna" and "krishna".
+		</div>
+		<div>
+			Let me explain what happened in 4th line:
+			<ul>
+				<li>The VM sees the 4th line.</li>
+				<li>Takes the existing value of "name" from the string pool.</li>
+				<li>Now appends "chaitanya" to the original value.</li>
+				<li>Creates a new string in the string pool called "krishna chaitanya".</li>
+			</ul>
+		</div>
+		<div>
+			Since I dint assign the new value to the "name" variable, when I print the name variable it prints "krishna" instead of "krishna chaitanya"
+		</div>
+		<div>
+			Let me explain what happened in 6th line:
+			<ul>
+				<li>The VM sees the 6th line.</li>
+				<li>Takes the value "krishna" from "name" variable.</li>
+				<li>Replace all characters matching 'a' with 'n'.</li>
+				<li>Creates a new string called "krishnn" in the string pool.</li>
+			</ul>
+		</div>
+		<div>
+			Since I dint assign the new value to the "name" variable, when I printed the name variable it printed "krishna" instead of "krishnn".
+		</div>
+		<div>
+			Now I will rewrite the same program to reflect the values in the name variable.
+		</div>
+		<div class="code">
+			<b>Code</b>
+			<textarea rows="6" cols="100" style="width: 99%">
+				public class AnotherStringTest {
+				public static void main(String kk[]) {
+				String name = "krishna";
+				name = name + "chaitanya";
+				System.out.println("My name is " + name);
+				name = name.replace('a', 'n');
+				System.out.println("My name is " + name);
+				}
+				}
+			</textarea>
+		</div>
+		<div>
+			This time the 5th and 7th line prints the result as we expected. "krishna chaitanya" and "krishnn chnitnnyn".
+		</div>
+		<div>
+			Let me explain what happened in 4th line:
+			<ul>
+				<li>The VM sees the 4th line.</li>
+				<li>Takes the existing value of "name" from the string pool.</li>
+				<li>Now appends "chaitanya" to the original value.</li>
+				<li>Creates a new string in the string pool called "krishna chaitanya".</li>
+				<li>Then deletes the variable "name".</li>
+				<li>Creates a variable "name" again.</li>
+				<li>Makes the variable "name" to point to "krishna chaitanya" string.</li>
+			</ul>
+		</div>
+		<div>
+			Let me now explain what happened in 6th line:
+			<ul>
+				<li>The VM sees the 6th line.</li>
+				<li>Takes the value "krishna chaitanya" from "name" variable. (remember the value now is "krishna chaitanya" in the variable "name")</li>
+				<li>Replace all characters matching 'a' with 'n'.</li>
+				<li>Creates a new string called "krishnn chnitannyn" in the string pool.</li>
+				<li>Deletes the variable "name".</li>
+				<li>Create a variable called "name" again.</li>
+				<li>Makes the variable "name" point to "krishnn chnitannyn" string.</li>
+			</ul>
+		</div>
+		<div>
+			Since the VM is spending lot of time in creating the new strings, deleting the variable and creating the same variable again, so much 
+			time is wasted. This is awkward so we opt for <b class="javaclass">StringBuffer</b>.
+		</div>
+		<div>
+			When you create a string using <b class="javaclass">StringBuffer</b> java does not destroys the variables when you try to reassign another value to the variable.
+		</div>
+		<div>
+			<b class="javaclass">StringBuffer</b> has convenient methods like append, delete, deleteCharAt, insert, reverse, replace and many more. All these methods will 
+			not create a new string; instead they work in the same pool location where the actual string resides.
+		</div>
+		<div>
+			This is the main difference between <b class="javaclass">String</b> and <b class="javaclass">StringBuffer</b>.
+		</div>
+		<div>
+			Another noticeable thing about <b class="javaclass">String</b> class is when you create two variables which hold the same string; the VM does not create 2 
+			separate strings. It creates only one string and 2 variables. These variables will point to the same string. You can see this is the 
+			string pool picture which I showed above.
+		</div>
+		<div>
+			Consider this example:
+		</div>
+		<div class="code">
+			<b>Code</b>
+			<textarea rows="6" cols="100" style="width: 99%">
+				public class YetAnotherStringTest {
+				public static void main(String kk[]) {
+				String var1 = "karthik";
+				String var2 = "karthik";
+				System.out.println(var1 == var2);
+				}
+				}
+			</textarea>
+		</div>
+		<div>
+			This program will output "true". In this program we are creating two variables "var1" and "var2". Both variables have same string 
+			assigned to them. Java will not create two string "karthik" and "karthik" in the string pool. There will be only one string "karthik" and both 
+			the variables point to the same string "karthik". That is why when I compared the objects "var1" and "var2" using the "==" operator it 
+			outputted true.
+		</div>
+		<div>
+			Note: In line 5 I am not comparing the values <del>"karthik" == "karthik"</del>. I am comparing the variable references. If you want to compare values 
+			use equals() method. Eg: var1.equals(var2) or var2.equals(var1). == and equals() are different. The former compares objects, while the 
+			later one compares the contents.
+		</div>
+		<div>
+			Now what if I want the VM to create two strings "karthik" one for each variable "var1"and "var2"?
+		</div>
+		<div>
+			Use the <label class="javakeyword">new</label> operator.
+		</div>
+		<div class="code">
+			<b>Code</b>
+			<textarea rows="6" cols="100" style="width: 99%">
+				public class YetAnotherBoringStringTest {
+				public static void main(String kk[]) {
+				String var1 = new String("karthik");
+				String var2 = new String("karthik");
+				System.out.println(var1 == var2);
+				}
+				}
+			</textarea>
+		</div>
+		<div>
+			This time the VM creates two new strings "karthik" and "karthik". "var1" and "var2" will be pointing to different locations. So this program 
+			will output false.
+		</div>
+		<hr class="separator">
+		<div>
+			<a href="/">Home</a>
+		</div>
+	</div>
+</body>
+</html>
